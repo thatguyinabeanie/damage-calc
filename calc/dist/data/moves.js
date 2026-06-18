@@ -5429,6 +5429,7 @@ var CHAMPIONS_PATCH = {
     'Fire Lash': { bp: 90 },
     'First Impression': { bp: 100 },
     'Grav Apple': { bp: 90 },
+    'Growth': { type: 'Grass' },
     'Infernal Parade': { bp: 65 },
     'Mountain Gale': { bp: 120 },
     'Night Daze': { bp: 90 },

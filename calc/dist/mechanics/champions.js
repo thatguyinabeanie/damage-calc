@@ -164,7 +164,7 @@ function calculateChampions(gen, attacker, defender, move, field) {
         (move.hasType('Electric') &&
             defender.hasAbility('Lightning Rod', 'Motor Drive', 'Volt Absorb')) ||
         (move.hasType('Ground') &&
-            !field.isGravity && defender.hasAbility('Levitate')) ||
+            !field.isGravity && defender.hasAbility('Levitate', 'Eelevate')) ||
         (move.flags.bullet && defender.hasAbility('Bulletproof')) ||
         (move.flags.sound && !move.named('Clangorous Soul') && defender.hasAbility('Soundproof')) ||
         (move.priority > 0 && defender.hasAbility('Queenly Majesty', 'Armor Tail')) ||
@@ -570,6 +570,10 @@ function calculateAtModsChampions(gen, attacker, defender, move, field, desc) {
     else if (attacker.hasAbility('Flash Fire') && attacker.abilityOn && move.hasType('Fire')) {
         atMods.push(6144);
         desc.attackerAbility = 'Flash Fire';
+    }
+    else if (attacker.hasAbility('Fire Mane') && move.hasType('Fire')) {
+        atMods.push(6144);
+        desc.attackerAbility = attacker.ability;
     }
     else if ((attacker.hasAbility('Water Bubble') && move.hasType('Water')) ||
         (attacker.hasAbility('Huge Power', 'Pure Power') && move.category === 'Physical')) {

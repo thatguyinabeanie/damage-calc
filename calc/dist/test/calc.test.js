@@ -1589,6 +1589,56 @@ describe('calc', function () {
                     expect(snowResult.range()[1]).toEqual(noSnowResult.range()[1]);
                 });
             });
+            describe('Fire Mane (Mega Pyroar)', function () {
+                var defender = Pokemon('Blastoise');
+                test('should boost Fire-type moves by 1.5x', function () {
+                    var withFireMane = Pokemon('Pyroar-Mega', { ability: 'Fire Mane' });
+                    var withoutFireMane = Pokemon('Pyroar-Mega', { ability: 'Unnerve' });
+                    var fireMove = Move('Flamethrower');
+                    var boostedResult = calculate(withFireMane, defender, fireMove);
+                    var unboostedResult = calculate(withoutFireMane, defender, fireMove);
+                    expect(boostedResult.range()[0]).toBeGreaterThan(unboostedResult.range()[0]);
+                    expect(boostedResult.range()[1]).toBeGreaterThan(unboostedResult.range()[1]);
+                });
+                test('should not boost non-Fire-type moves', function () {
+                    var withFireMane = Pokemon('Pyroar-Mega', { ability: 'Fire Mane' });
+                    var withoutFireMane = Pokemon('Pyroar-Mega', { ability: 'Unnerve' });
+                    var normalMove = Move('Hyper Voice');
+                    var boostedResult = calculate(withFireMane, defender, normalMove);
+                    var unboostedResult = calculate(withoutFireMane, defender, normalMove);
+                    expect(boostedResult.range()[0]).toEqual(unboostedResult.range()[0]);
+                    expect(boostedResult.range()[1]).toEqual(unboostedResult.range()[1]);
+                });
+                test('should set attackerAbility in description', function () {
+                    var attacker = Pokemon('Pyroar-Mega', { ability: 'Fire Mane' });
+                    var result = calculate(attacker, defender, Move('Flamethrower'));
+                    expect(result.desc()).toContain('Fire Mane');
+                });
+            });
+            describe('Eelevate (Mega Eelektross)', function () {
+                test('should grant immunity to Ground-type moves', function () {
+                    var eelevate = Pokemon('Eelektross-Mega', { ability: 'Eelevate' });
+                    var attacker = Pokemon('Garchomp');
+                    var groundMove = Move('Earthquake');
+                    var result = calculate(attacker, eelevate, groundMove);
+                    expect(result.damage).toBe(0);
+                });
+                test('should not grant immunity to Ground moves in Gravity', function () {
+                    var eelevate = Pokemon('Eelektross-Mega', { ability: 'Eelevate' });
+                    var attacker = Pokemon('Garchomp');
+                    var groundMove = Move('Earthquake');
+                    var gravityField = Field({ isGravity: true });
+                    var result = calculate(attacker, eelevate, groundMove, gravityField);
+                    expect(result.damage).not.toBe(0);
+                });
+                test('should not grant immunity to non-Ground moves', function () {
+                    var eelevate = Pokemon('Eelektross-Mega', { ability: 'Eelevate' });
+                    var attacker = Pokemon('Garchomp');
+                    var waterMove = Move('Surf');
+                    var result = calculate(attacker, eelevate, waterMove);
+                    expect(result.damage).not.toBe(0);
+                });
+            });
         });
     });
 });
